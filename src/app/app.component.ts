@@ -10,6 +10,8 @@ import { AcaoRenderer} from './acao-renderer.component';
 export class AppComponent {
 	title = 'AGGrid';
 
+	paginationPageSize = 10;
+
 	public localidades: {
 		name: string;
 		code: number;
@@ -64,6 +66,9 @@ export class AppComponent {
 			let action = params.event.target.dataset.acao;
 
 			if (action === 'editar') {
+				console.log("Saving changes:");
+				console.log(params);
+
 				params.api.startEditingCell({
 					rowIndex: params.node.rowIndex,
 					colKey: params.columnApi.getDisplayedCenterColumns()[0]
@@ -72,6 +77,9 @@ export class AppComponent {
 			}
 
 			if (action === 'eliminar') {
+				console.log("Deleting:");
+				console.log(params.data);
+
 				params.api.applyTransaction({
 					remove: [params.node.data],
 				});
@@ -97,6 +105,8 @@ export class AppComponent {
 	}
 
 	onRowEditingStopped(params) {
+		params.api.stopEditing(true);
+
 		params.api.refreshCells({
 			columns: ['acao'],
 			rowNodes: [params.node],
