@@ -2,30 +2,6 @@ import { Component } from '@angular/core';
 import distritosConcelhosFreguesias from './distritosConcelhosFreguesias.json';
 import { AcaoRenderer} from './acao-renderer.component';
 
-function renderCell(params) {
-	let eGui = document.createElement('div');
-
-	let editingCells = params.api.getEditingCells();
-	// checks if the rowIndex matches in at least one of the editing cells
-	let aEditar = editingCells.some((cell) => {
-		return cell.rowIndex === params.node.rowIndex;
-	});
-
-	if (aEditar) {
-		eGui.innerHTML = `
-			<button data-acao="cancelar" style="margin-left: 10px">Cancelar</button>
-			<button data-acao="eliminar" style="margin-left: 10px">Eliminar</button>
-		`;
-	} else {
-		eGui.innerHTML = `
-			<button data-acao="editar">Editar {{aEditar}}</button>
-			<button data-acao="guardar" style="margin-left: 10px">Guardar</button>
-		`;
-	}
-
-	return eGui;
-}
-
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
