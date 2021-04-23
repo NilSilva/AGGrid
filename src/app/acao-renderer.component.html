@@ -1,0 +1,10 @@
+
+<div *ngIf="!aEditar">
+	<button data-acao="editar">Editar {{aEditar}}</button>
+	<button data-acao="eliminar" style="margin-left: 10px">Eliminar</button>
+</div>
+<div *ngIf="aEditar">
+	<button data-acao="cancelar" style="margin-left: 10px">Cancelar</button>
+	<button data-acao="guardar" style="margin-left: 10px">Guardar</button>
+</div>
+

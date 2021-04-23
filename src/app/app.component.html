@@ -1,0 +1,13 @@
+<ag-grid-angular
+	style="width: 1300px; height: 500px"
+	class="ag-theme-alpine"
+	[rowData]="localidades"
+	[columnDefs]="columnDefs"
+	[editType]="editType"
+	[suppressClickEdit]="true"
+	[frameworkComponents]="frameworkComponents"
+	(cellClicked)="onCellClicked($event)"
+	(rowEditingStopped)="onRowEditingStopped($event)"
+    (rowEditingStarted)="onRowEditingStarted($event)"
+>
+</ag-grid-angular>
