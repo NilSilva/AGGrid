@@ -8,41 +8,47 @@ import {
 @Component({
 	selector: 'acao-component',
 	template: `
-		<div *ngIf="!isEditing">
-			<button data-acao="editar">Editar</button>
-			<button data-acao="eliminar" style="margin-left: 10px">
+		<div>
+			<button (click)="edit($event)">Editar</button>
+			<button (click)="cancelar($event)" style="margin-left: 10px">
 				Eliminar
-			</button>
-		</div>
-		<div *ngIf="isEditing">
-			<button data-acao="cancelar" style="margin-left: 10px">
-				Cancelar
-			</button>
-			<button data-acao="guardar" style="margin-left: 10px">
-				Guardar
 			</button>
 		</div>
 	`,
 })
 export class AcaoRenderer implements ICellRendererAngularComp {
-	public isEditing: boolean;
-
+	params: ICellRendererParams;
 	refresh(params: ICellRendererParams): boolean {
-		let editingCells = params.api.getEditingCells();
-
-		this.isEditing = editingCells.some((cell) => {
-			return cell.rowIndex === params.node.rowIndex;
-		});
-
-		return this.isEditing;
+		return true;
 	}
 	afterGuiAttached?(params?: IAfterGuiAttachedParams): void {}
 
 	agInit(params: any): void {
-		let editingCells = params.api.getEditingCells();
+		this.params = params;
+	}
 
-		this.isEditing = editingCells.some((cell) => {
-			return cell.rowIndex === params.node.rowIndex;
-		});
+	edit(event) {
+		if (event.target.innerHTML == 'Editar') {
+			event.target.innerHTML = 'Guardar';
+			event.target.dataset.acao = 'editar';
+
+			event.target.nextElementSibling.innerHTML = 'Cancelar';
+		} else {
+			event.target.innerHTML = 'Editar';
+			event.target.dataset.acao = 'guardar';
+
+			event.target.nextElementSibling.innerHTML = 'Eliminar';
+		}
+	}
+
+	cancelar(event) {
+		if (event.target.innerHTML == 'Cancelar') {
+			event.target.innerHTML = 'Eliminar';
+			event.target.dataset.acao = "cancelar";
+
+			event.target.previousElementSibling.innerHTML = 'Editar';
+		} else {
+			event.target.dataset.acao = 'eliminar';
+		}
 	}
 }

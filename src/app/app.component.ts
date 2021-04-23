@@ -64,8 +64,6 @@ export class AppComponent {
 			let action = params.event.target.dataset.acao;
 
 			if (action === 'editar') {
-				console.log('editar');
-
 				params.api.startEditingCell({
 					rowIndex: params.node.rowIndex,
 					colKey: params.columnApi.getDisplayedCenterColumns()[0]
@@ -74,22 +72,17 @@ export class AppComponent {
 			}
 
 			if (action === 'eliminar') {
-				console.log('eliminar');
-
 				params.api.applyTransaction({
 					remove: [params.node.data],
 				});
 			}
 
 			if (action === 'guardar') {
-				console.log('guardar');
 
 				params.api.stopEditing(false);
 			}
 
 			if (action === 'cancelar') {
-				console.log('cancelar');
-
 				params.api.stopEditing(true);
 			}
 		}
