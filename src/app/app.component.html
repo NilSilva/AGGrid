@@ -1,6 +1,7 @@
 <ag-grid-angular
-	style="width: 1300px; height: 500px"
+	style="width: 1100px; height: 500px"
 	class="ag-theme-alpine"
+	#agGrid
 	[pagination]="true"
 	[paginationPageSize]="paginationPageSize"
 	[rowData]="localidades"
@@ -11,5 +12,6 @@
 	(cellClicked)="onCellClicked($event)"
 	(rowEditingStopped)="onRowEditingStopped($event)"
     (rowEditingStarted)="onRowEditingStarted($event)"
->
+	accentedSort=true
+	animateRows=true >
 </ag-grid-angular>

@@ -1,13 +1,28 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import distritosConcelhosFreguesias from './distritosConcelhosFreguesias.json';
-import { AcaoRenderer} from './acao-renderer.component';
+import { AcaoRenderer } from './acao-renderer.component';
+import { AgGridAngular } from "ag-grid-angular";
+import{ NewRowRenderer } from './new-row-renderer.component';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit{
+	@ViewChild('agGrid') agGrid: AgGridAngular;
+
+	onAddRow(){
+		let rows = [];
+		rows.push(this.agGrid.api.getRowNode('0'));
+
+		this.agGrid.api.applyTransaction({
+			remove: [this.agGrid.api.getRowNode('0').data],
+		});
+
+	    this.agGrid.api.setPinnedTopRowData(rows);
+	}
+
 	title = 'AGGrid';
 
 	paginationPageSize = 10;
@@ -22,6 +37,7 @@ export class AppComponent {
 
 	public frameworkComponents = {
 		acaoRenderer: AcaoRenderer,
+		newRowRenderer: NewRowRenderer
 	};
 
 	columnDefs = [
@@ -31,6 +47,22 @@ export class AppComponent {
 			sortable: true,
 			editable: true,
 			width: 700,
+			colSpan: function(params){
+				if(params.node.rowIndex == 0){
+					return 4;
+				} else {
+					return 1;
+				}
+			},
+			cellRendererSelector: function(params){
+				if(params.node.rowIndex == 0){
+					return {
+						component: 'newRowRenderer'
+					}
+				} else {
+					return null;
+				}
+			}
 		},
 		{
 			headerName: 'Tipo',
@@ -47,14 +79,9 @@ export class AppComponent {
 		},
 		{
 			headerName: 'Ação',
-			width: 380,
+			width: 180,
 			colId: 'acao',
 			cellRenderer: 'acaoRenderer',
-			cellRendererParams:{
-				clicked: function(field: any){
-					console.log(this);
-				}
-			}
 		},
 	];
 
@@ -66,34 +93,36 @@ export class AppComponent {
 			let action = params.event.target.dataset.acao;
 
 			if (action === 'editar') {
-				console.log("Saving changes:");
-				console.log(params);
+				console.log('Editing data:');
+				console.log(params.data);
 
 				params.api.startEditingCell({
 					rowIndex: params.node.rowIndex,
-					colKey: params.columnApi.getDisplayedCenterColumns()[0]
-						.colId,
+					colKey: params.columnApi.getDisplayedCenterColumns()[0].colId,
 				});
-			}
-
-			if (action === 'eliminar') {
-				console.log("Deleting:");
+			} else if (action === 'eliminar') {
+				console.log('Deleting:');
 				console.log(params.data);
 
 				params.api.applyTransaction({
 					remove: [params.node.data],
 				});
-			}
-
-			if (action === 'guardar') {
+			} else if (action === 'guardar') {
+				console.log('Saving data:');
+				console.log(params.data);
+				console.log(params.data.name);
 
 				params.api.stopEditing(false);
-			}
-
-			if (action === 'cancelar') {
+			} else if (action === 'cancelar') {
+				params.api.stopEditing(true);
+			} else {
 				params.api.stopEditing(true);
 			}
 		}
+	}
+
+	ngAfterViewInit(){
+		this.onAddRow();
 	}
 
 	onRowEditingStarted(params) {
@@ -105,12 +134,16 @@ export class AppComponent {
 	}
 
 	onRowEditingStopped(params) {
-		params.api.stopEditing(true);
-
 		params.api.refreshCells({
 			columns: ['acao'],
 			rowNodes: [params.node],
 			force: true,
 		});
+	}
+
+	newRow(event){
+		this.newRow({name: "nil", code: 0, level: "1"});
+		console.log(this.localidades);
+
 	}
 }

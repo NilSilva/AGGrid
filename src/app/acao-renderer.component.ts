@@ -18,9 +18,16 @@ import {
 })
 export class AcaoRenderer implements ICellRendererAngularComp {
 	params: ICellRendererParams;
+
 	refresh(params: ICellRendererParams): boolean {
-		return true;
+		if(params.api.getEditingCells().length == 0){
+			return false;
+		}else{
+			params.api.undoCellEditing();
+			return true;
+		}
 	}
+	
 	afterGuiAttached?(params?: IAfterGuiAttachedParams): void {}
 
 	agInit(params: any): void {
