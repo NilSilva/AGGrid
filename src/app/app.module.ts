@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 		BrowserModule,
 		AppRoutingModule,
 		CommonModule,
-		AgGridModule.withComponents([AcaoRenderer, CommonModule])
+		AgGridModule.withComponents([AcaoRenderer])
 	],
 	providers: [],
 	bootstrap: [AppComponent]
