@@ -2,17 +2,17 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import distritosConcelhosFreguesias from './distritosConcelhosFreguesias.json';
 import { AcaoRenderer } from './acao-renderer.component';
 import { AgGridAngular } from "ag-grid-angular";
-import { NewRowRenderer } from './new-row-renderer.component';
+import{ NewRowRenderer } from './new-row-renderer.component';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit{
 	@ViewChild('agGrid') agGrid: AgGridAngular;
 
-	onAddRow() {
+	onAddRow(){
 		let rows = [];
 		rows.push(this.agGrid.api.getRowNode('0'));
 
@@ -20,7 +20,7 @@ export class AppComponent implements AfterViewInit {
 			remove: [this.agGrid.api.getRowNode('0').data],
 		});
 
-		this.agGrid.api.setPinnedTopRowData(rows);
+	    this.agGrid.api.setPinnedTopRowData(rows);
 	}
 
 	title = 'AGGrid';
@@ -47,15 +47,15 @@ export class AppComponent implements AfterViewInit {
 			sortable: true,
 			editable: true,
 			width: 700,
-			colSpan: function (params) {
-				if (params.node.rowIndex == 0) {
+			colSpan: function(params){
+				if(params.node.rowIndex == 0){
 					return 4;
 				} else {
 					return 1;
 				}
 			},
-			cellRendererSelector: function (params) {
-				if (params.node.rowIndex == 0) {
+			cellRendererSelector: function(params){
+				if(params.node.rowIndex == 0){
 					return {
 						component: 'newRowRenderer'
 					}
@@ -151,8 +151,8 @@ export class AppComponent implements AfterViewInit {
 		});
 	}
 
-	newRow(event) {
-		this.newRow({ name: "nil", code: 0, level: "1" });
+	newRow(event){
+		this.newRow({name: "nil", code: 0, level: "1"});
 		console.log(this.localidades);
 
 	}
