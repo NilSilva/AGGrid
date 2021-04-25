@@ -12,13 +12,9 @@ import{ NewRowRenderer } from './new-row-renderer.component';
 export class AppComponent implements AfterViewInit{
 	@ViewChild('agGrid') agGrid: AgGridAngular;
 
-	onAddRow(){
+	pinRow() {
 		let rows = [];
-		rows.push(this.agGrid.api.getRowNode('0'));
-
-		this.agGrid.api.applyTransaction({
-			remove: [this.agGrid.api.getRowNode('0').data],
-		});
+		rows.push({});
 
 	    this.agGrid.api.setPinnedTopRowData(rows);
 	}
@@ -47,22 +43,14 @@ export class AppComponent implements AfterViewInit{
 			sortable: true,
 			editable: true,
 			width: 700,
-			colSpan: function(params){
-				if(params.node.rowIndex == 0){
+			colSpan: function (params) {
+				if(params.node.isRowPinned()){
 					return 4;
 				} else {
 					return 1;
 				}
 			},
-			cellRendererSelector: function(params){
-				if(params.node.rowIndex == 0){
-					return {
-						component: 'newRowRenderer'
-					}
-				} else {
-					return null;
-				}
-			}
+			pinnedRowCellRenderer: 'newRowRenderer'
 		},
 		{
 			headerName: 'Tipo',
@@ -86,6 +74,7 @@ export class AppComponent implements AfterViewInit{
 	];
 
 	onCellClicked(params) {
+		console.log('Cell clicked.');
 		if (
 			params.column.colId === 'acao' &&
 			params.event.target.dataset.acao
@@ -118,21 +107,24 @@ export class AppComponent implements AfterViewInit{
 			} else {
 				params.api.stopEditing(true);
 			}
-		} /* else {
-			if (params.event.target.dataset.newRow) {
-				params.api.applyTransaction({
-					add: {
-						name: "aaaaaaaa",
+		} else {
+			if (params.event.target.dataset.newrow === "true") {
+				let x = params.api.applyTransaction({
+					add: [{
+						name: "A freguesia do Nil",
 						code: 0,
-						level: "1"
-					}
+						level: "3"
+					}],
+					addIndex: 0
 				});
+
+				console.log(x.add[0]);
 			}
-		} */
+		}
 	}
 
 	ngAfterViewInit() {
-		this.onAddRow();
+		this.pinRow();
 	}
 
 	onRowEditingStarted(params) {

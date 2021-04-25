@@ -8,7 +8,7 @@ import {
 @Component({
 	selector: 'new-row-component',
 	template: `
-		<div style="padding-left=auto;padding-right=auto;">
+		<div style="y-overflow:hidden">
 			<button data-newRow="true">
 				New row
 			</button>
@@ -20,7 +20,6 @@ export class NewRowRenderer implements ICellRendererAngularComp {
 		throw new Error('Method not implemented.');
 	}
 	agInit(params: ICellRendererParams): void {
-		console.log('teste');
 	}
 	afterGuiAttached?(params?: IAfterGuiAttachedParams): void {
 		throw new Error('Method not implemented.');
