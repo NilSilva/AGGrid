@@ -10,7 +10,7 @@ import {
 	template: `
 		<div>
 			<button data-acao="guardar">Guardar</button>
-			<button data-acao="cancelar" style="margin-left: 10px">
+			<button onclick="this.disabled=true" data-acao="cancelar" style="margin-left: 10px">
 				Cancelar
 			</button>
 		</div>

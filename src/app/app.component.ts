@@ -121,6 +121,9 @@ export class AppComponent implements AfterViewInit {
 					remove: [params.node.data],
 				});
 			} else if (action === 'guardar') {
+				if (this.newRow) {
+					this.newRow = false;
+				}
 				params.api.stopEditing(false);
 
 				console.log('Saving data:');
@@ -132,6 +135,8 @@ export class AppComponent implements AfterViewInit {
 					params.api.applyTransaction({
 						remove: [params.node.data],
 					});
+
+					this.newRow = false;
 				} else {
 					params.api.stopEditing(true);
 				}
@@ -166,6 +171,9 @@ export class AppComponent implements AfterViewInit {
 	}
 
 	onRowEditingStopped(params) {
+		if (this.newRow) {
+			this.newRow = false;
+		}
 		params.api.refreshCells({
 			columns: ['acao'],
 			rowNodes: [params.node],
