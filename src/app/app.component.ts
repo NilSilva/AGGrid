@@ -1,22 +1,22 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import distritosConcelhosFreguesias from './distritosConcelhosFreguesias.json';
 import { AcaoRenderer } from './acao-renderer.component';
-import { AgGridAngular } from "ag-grid-angular";
-import{ NewRowRenderer } from './new-row-renderer.component';
+import { AgGridAngular } from 'ag-grid-angular';
+import { NewRowRenderer } from './new-row-renderer.component';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements AfterViewInit{
+export class AppComponent implements AfterViewInit {
 	@ViewChild('agGrid') agGrid: AgGridAngular;
 
 	pinRow() {
 		let rows = [];
 		rows.push({});
 
-	    this.agGrid.api.setPinnedTopRowData(rows);
+		this.agGrid.api.setPinnedTopRowData(rows);
 	}
 
 	title = 'AGGrid';
@@ -33,7 +33,7 @@ export class AppComponent implements AfterViewInit{
 
 	public frameworkComponents = {
 		acaoRenderer: AcaoRenderer,
-		newRowRenderer: NewRowRenderer
+		newRowRenderer: NewRowRenderer,
 	};
 
 	columnDefs = [
@@ -44,13 +44,13 @@ export class AppComponent implements AfterViewInit{
 			editable: true,
 			width: 700,
 			colSpan: function (params) {
-				if(params.node.isRowPinned()){
+				if (params.node.isRowPinned()) {
 					return 4;
 				} else {
 					return 1;
 				}
 			},
-			pinnedRowCellRenderer: 'newRowRenderer'
+			pinnedRowCellRenderer: 'newRowRenderer',
 		},
 		{
 			headerName: 'Tipo',
@@ -87,7 +87,8 @@ export class AppComponent implements AfterViewInit{
 
 				params.api.startEditingCell({
 					rowIndex: params.node.rowIndex,
-					colKey: params.columnApi.getDisplayedCenterColumns()[0].colId,
+					colKey: params.columnApi.getDisplayedCenterColumns()[0]
+						.colId,
 				});
 			} else if (action === 'eliminar') {
 				console.log('Deleting:');
@@ -97,28 +98,27 @@ export class AppComponent implements AfterViewInit{
 					remove: [params.node.data],
 				});
 			} else if (action === 'guardar') {
+				params.api.stopEditing(false);
+
 				console.log('Saving data:');
 				console.log(params.data);
-				console.log(params.data.name);
-
-				params.api.stopEditing(false);
 			} else if (action === 'cancelar') {
 				params.api.stopEditing(true);
 			} else {
 				params.api.stopEditing(true);
 			}
 		} else {
-			if (params.event.target.dataset.newrow === "true") {
+			if (params.event.target.dataset.newrow === 'true') {
 				let x = params.api.applyTransaction({
-					add: [{
-						name: "A freguesia do Nil",
-						code: 0,
-						level: "3"
-					}],
-					addIndex: 0
+					add: [{}],
+					addIndex: 0,
 				});
 
-				console.log(x.add[0]);
+				params.api.startEditingCell({
+					rowIndex: params.node.rowIndex,
+					colKey: params.columnApi.getDisplayedCenterColumns()[0]
+						.colId,
+				});
 			}
 		}
 	}
@@ -141,11 +141,5 @@ export class AppComponent implements AfterViewInit{
 			rowNodes: [params.node],
 			force: true,
 		});
-	}
-
-	newRow(event){
-		this.newRow({name: "nil", code: 0, level: "1"});
-		console.log(this.localidades);
-
 	}
 }

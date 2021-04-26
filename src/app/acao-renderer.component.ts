@@ -23,11 +23,10 @@ export class AcaoRenderer implements ICellRendererAngularComp {
 		if(params.api.getEditingCells().length == 0){
 			return false;
 		}else{
-			params.api.undoCellEditing();
 			return true;
 		}
 	}
-	
+
 	afterGuiAttached?(params?: IAfterGuiAttachedParams): void {}
 
 	agInit(params: any): void {
