@@ -40,7 +40,7 @@ export class AppComponent implements AfterViewInit {
 			colId: 'name',
 			sortable: true,
 			editable: true,
-			width: 700,
+			width: 400,
 			colSpan: function (params) {
 				if (params.node.isRowPinned()) {
 					return 4;
@@ -65,7 +65,7 @@ export class AppComponent implements AfterViewInit {
 		},
 		{
 			headerName: 'Ação',
-			width: 180,
+			width: 100,
 			colId: 'action',
 			cellRendererSelector: function (params) {
 				let beforeClickEdit = {

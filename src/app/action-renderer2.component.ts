@@ -9,10 +9,20 @@ import {
 	selector: 'action2-component',
 	template: `
 		<div>
-			<button data-action="save">Guardar</button>
-			<button onclick="this.disabled=true" data-action="cancel" style="margin-left: 10px">
-				Cancelar
-			</button>
+			<span
+				data-action="save"
+				style="margin-left: 10px;cursor: pointer;"
+				class="material-icons"
+			>
+			save
+			</span>
+			<span
+				data-action="cancel"
+				style="margin-left: 10px;cursor: pointer;"
+				class="material-icons"
+			>
+			cancel
+			</span>
 		</div>
 	`,
 })

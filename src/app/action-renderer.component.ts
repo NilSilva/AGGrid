@@ -9,10 +9,20 @@ import {
 	selector: 'action-component',
 	template: `
 		<div>
-			<button data-action="edit">Editar</button>
-			<button onclick="this.disabled=true" data-action="delete" style="margin-left: 10px">
-				Eliminar
-			</button>
+			<span
+				data-action="edit"
+				style="margin-left: 10px;cursor: pointer;"
+				class="material-icons"
+			>
+				edit
+			</span>
+			<span
+				data-action="delete"
+				style="margin-left: 10px;cursor: pointer;"
+				class="material-icons"
+			>
+				delete
+			</span>
 		</div>
 	`,
 })
