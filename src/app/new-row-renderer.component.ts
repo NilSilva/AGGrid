@@ -8,7 +8,7 @@ import {
 @Component({
 	selector: 'new-row-component',
 	template: `
-		<div style="y-overflow:hidden">
+		<div style="display: flex;margin-top:10px;justify-content: center;overflow: hidden;">
 			<button data-newRow="true">
 				New row
 			</button>

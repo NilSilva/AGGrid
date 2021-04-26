@@ -13,6 +13,8 @@ import { NewRowRenderer } from './new-row-renderer.component';
 export class AppComponent implements AfterViewInit {
 	@ViewChild('agGrid') agGrid: AgGridAngular;
 
+	public newRow = false;
+
 	pinRow() {
 		let rows = [];
 		rows.push({});
@@ -35,7 +37,7 @@ export class AppComponent implements AfterViewInit {
 	public frameworkComponents = {
 		acaoRenderer: AcaoRenderer,
 		acaoRenderer2: AcaoRenderer2,
-		newRowRenderer: NewRowRenderer
+		newRowRenderer: NewRowRenderer,
 	};
 
 	columnDefs = [
@@ -71,27 +73,27 @@ export class AppComponent implements AfterViewInit {
 			headerName: 'Ação',
 			width: 180,
 			colId: 'acao',
-			cellRendererSelector: function(params){
+			cellRendererSelector: function (params) {
 				let beforeEdit = {
-                    component: 'acaoRenderer'
-                };
+					component: 'acaoRenderer',
+				};
 
 				let afterEdit = {
-                    component: 'acaoRenderer2'
-                };
+					component: 'acaoRenderer2',
+				};
 
 				let editingCells = params.api.getEditingCells();
 
 				let isRowEditing = editingCells.some((cell) => {
 					return cell.rowIndex === params.node.rowIndex;
-				})
+				});
 
-				if(!isRowEditing){
+				if (!isRowEditing) {
 					return beforeEdit;
-				}else{
+				} else {
 					return afterEdit;
 				}
-			}
+			},
 		},
 	];
 
@@ -124,11 +126,20 @@ export class AppComponent implements AfterViewInit {
 				console.log('Saving data:');
 				console.log(params.data);
 			} else if (action === 'cancelar') {
-				params.api.stopEditing(true);
+				if (this.newRow) {
+					console.log('Deleting new row.');
+
+					params.api.applyTransaction({
+						remove: [params.node.data],
+					});
+				} else {
+					params.api.stopEditing(true);
+				}
 			}
 		} else {
 			if (params.event.target.dataset.newrow === 'true') {
-				let x = params.api.applyTransaction({
+				this.newRow = true;
+				params.api.applyTransaction({
 					add: [{}],
 					addIndex: 0,
 				});
@@ -155,8 +166,6 @@ export class AppComponent implements AfterViewInit {
 	}
 
 	onRowEditingStopped(params) {
-		console.log(params);
-
 		params.api.refreshCells({
 			columns: ['acao'],
 			rowNodes: [params.node],
