@@ -10,9 +10,9 @@ import {
 	template: `
 		<div
 			data-newRow="true"
-			style="cursor: pointer;text-align: center;"
+			style="cursor: pointer;text-align: center;color:#bec8d4"
 		>
-			<i style="vertical-align:middle;" class="material-icons"> add </i><span style="vertical-align:middle;">Create new row</span>
+			<i style="vertical-align:middle;" class="material-icons"> playlist_add </i><span style="vertical-align:middle;">Create new row</span>
 
 		</div>
 	`,

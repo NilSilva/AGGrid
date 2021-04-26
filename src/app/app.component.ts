@@ -143,13 +143,16 @@ export class AppComponent implements AfterViewInit {
 			params.event.target.dataset.newrow
 		) {
 			this.newRow = true;
+
+			params.api.paginationGoToPage(0)
+
 			params.api.applyTransaction({
 				add: [{}],
 				addIndex: 0,
 			});
 
 			params.api.startEditingCell({
-				rowIndex: params.node.rowIndex,
+				rowIndex: 0,
 				colKey: params.columnApi.getDisplayedCenterColumns()[0].colId,
 			});
 		}
