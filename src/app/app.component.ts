@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import distritosConcelhosFreguesias from './distritosConcelhosFreguesias.json';
 import { AcaoRenderer } from './acao-renderer.component';
+import { AcaoRenderer2 } from './acao-renderer2.component';
 import { AgGridAngular } from 'ag-grid-angular';
 import { NewRowRenderer } from './new-row-renderer.component';
 
@@ -33,7 +34,8 @@ export class AppComponent implements AfterViewInit {
 
 	public frameworkComponents = {
 		acaoRenderer: AcaoRenderer,
-		newRowRenderer: NewRowRenderer,
+		acaoRenderer2: AcaoRenderer2,
+		newRowRenderer: NewRowRenderer
 	};
 
 	columnDefs = [
@@ -69,12 +71,31 @@ export class AppComponent implements AfterViewInit {
 			headerName: 'Ação',
 			width: 180,
 			colId: 'acao',
-			cellRenderer: 'acaoRenderer',
+			cellRendererSelector: function(params){
+				let beforeEdit = {
+                    component: 'acaoRenderer'
+                };
+
+				let afterEdit = {
+                    component: 'acaoRenderer2'
+                };
+
+				let editingCells = params.api.getEditingCells();
+
+				let isRowEditing = editingCells.some((cell) => {
+					return cell.rowIndex === params.node.rowIndex;
+				})
+
+				if(!isRowEditing){
+					return beforeEdit;
+				}else{
+					return afterEdit;
+				}
+			}
 		},
 	];
 
 	onCellClicked(params) {
-		console.log('Cell clicked.');
 		if (
 			params.column.colId === 'acao' &&
 			params.event.target.dataset.acao
@@ -103,8 +124,6 @@ export class AppComponent implements AfterViewInit {
 				console.log('Saving data:');
 				console.log(params.data);
 			} else if (action === 'cancelar') {
-				params.api.stopEditing(true);
-			} else {
 				params.api.stopEditing(true);
 			}
 		} else {
@@ -136,6 +155,8 @@ export class AppComponent implements AfterViewInit {
 	}
 
 	onRowEditingStopped(params) {
+		console.log(params);
+
 		params.api.refreshCells({
 			columns: ['acao'],
 			rowNodes: [params.node],
