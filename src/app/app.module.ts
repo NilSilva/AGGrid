@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AgGridModule } from 'ag-grid-angular';
 
-import { AcaoRenderer } from './acao-renderer.component';
+import { ActionRenderer } from './action-renderer.component';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 		BrowserModule,
 		AppRoutingModule,
 		CommonModule,
-		AgGridModule.withComponents([AcaoRenderer])
+		AgGridModule.withComponents([ActionRenderer])
 	],
 	providers: [],
 	bootstrap: [AppComponent]

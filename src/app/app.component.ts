@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import distritosConcelhosFreguesias from './distritosConcelhosFreguesias.json';
-import { AcaoRenderer } from './acao-renderer.component';
-import { AcaoRenderer2 } from './acao-renderer2.component';
+import { ActionRenderer } from './action-renderer.component';
+import { ActionRenderer2 } from './action-renderer2.component';
 import { AgGridAngular } from 'ag-grid-angular';
 import { NewRowRenderer } from './new-row-renderer.component';
 
@@ -13,18 +13,11 @@ import { NewRowRenderer } from './new-row-renderer.component';
 export class AppComponent implements AfterViewInit {
 	@ViewChild('agGrid') agGrid: AgGridAngular;
 
-	public newRow = false;
-
-	pinRow() {
-		let rows = [];
-		rows.push({});
-
-		this.agGrid.api.setPinnedTopRowData(rows);
-	}
-
 	title = 'AGGrid';
 
-	paginationPageSize = 10;
+	public newRow: boolean = false;
+
+	public paginationPageSize: Number = 10;
 
 	public localidades: {
 		name: string;
@@ -35,8 +28,8 @@ export class AppComponent implements AfterViewInit {
 	public editType = 'fullRow';
 
 	public frameworkComponents = {
-		acaoRenderer: AcaoRenderer,
-		acaoRenderer2: AcaoRenderer2,
+		actionRenderer: ActionRenderer,
+		actionRenderer2: ActionRenderer2,
 		newRowRenderer: NewRowRenderer,
 	};
 
@@ -44,6 +37,7 @@ export class AppComponent implements AfterViewInit {
 		{
 			headerName: 'Nome',
 			field: 'name',
+			colId: 'name',
 			sortable: true,
 			editable: true,
 			width: 700,
@@ -72,55 +66,58 @@ export class AppComponent implements AfterViewInit {
 		{
 			headerName: 'Ação',
 			width: 180,
-			colId: 'acao',
+			colId: 'action',
 			cellRendererSelector: function (params) {
-				let beforeEdit = {
-					component: 'acaoRenderer',
+				let beforeClickEdit = {
+					component: 'actionRenderer',
 				};
 
-				let afterEdit = {
-					component: 'acaoRenderer2',
+				let afterClickEdit = {
+					component: 'actionRenderer2',
 				};
 
 				let editingCells = params.api.getEditingCells();
 
+				//Checks if rowIndex matches one of the editing cells
 				let isRowEditing = editingCells.some((cell) => {
 					return cell.rowIndex === params.node.rowIndex;
 				});
 
 				if (!isRowEditing) {
-					return beforeEdit;
+					return beforeClickEdit;
 				} else {
-					return afterEdit;
+					return afterClickEdit;
 				}
 			},
 		},
 	];
 
+	ngAfterViewInit() {
+		this.pinRow();
+	}
+
 	onCellClicked(params) {
+		//Check what column was clicked.
 		if (
-			params.column.colId === 'acao' &&
-			params.event.target.dataset.acao
+			params.column.colId === 'action' &&
+			params.event.target.dataset.action
 		) {
-			let action = params.event.target.dataset.acao;
+			let action = params.event.target.dataset.action;
 
-			if (action === 'editar') {
-				console.log('Editing data:');
-				console.log(params.data);
-
+			if (action === 'edit') {
 				params.api.startEditingCell({
 					rowIndex: params.node.rowIndex,
 					colKey: params.columnApi.getDisplayedCenterColumns()[0]
 						.colId,
 				});
-			} else if (action === 'eliminar') {
+			} else if (action === 'delete') {
 				console.log('Deleting:');
 				console.log(params.data);
 
 				params.api.applyTransaction({
 					remove: [params.node.data],
 				});
-			} else if (action === 'guardar') {
+			} else if (action === 'save') {
 				if (this.newRow) {
 					this.newRow = false;
 				}
@@ -128,7 +125,7 @@ export class AppComponent implements AfterViewInit {
 
 				console.log('Saving data:');
 				console.log(params.data);
-			} else if (action === 'cancelar') {
+			} else if (action === 'cancel') {
 				if (this.newRow) {
 					console.log('Deleting new row.');
 
@@ -141,30 +138,26 @@ export class AppComponent implements AfterViewInit {
 					params.api.stopEditing(true);
 				}
 			}
-		} else {
-			if (params.event.target.dataset.newrow === 'true') {
-				this.newRow = true;
-				params.api.applyTransaction({
-					add: [{}],
-					addIndex: 0,
-				});
+		} else if (
+			params.column.colId === 'name' &&
+			params.event.target.dataset.newrow
+		) {
+			this.newRow = true;
+			params.api.applyTransaction({
+				add: [{}],
+				addIndex: 0,
+			});
 
-				params.api.startEditingCell({
-					rowIndex: params.node.rowIndex,
-					colKey: params.columnApi.getDisplayedCenterColumns()[0]
-						.colId,
-				});
-			}
+			params.api.startEditingCell({
+				rowIndex: params.node.rowIndex,
+				colKey: params.columnApi.getDisplayedCenterColumns()[0].colId,
+			});
 		}
-	}
-
-	ngAfterViewInit() {
-		this.pinRow();
 	}
 
 	onRowEditingStarted(params) {
 		params.api.refreshCells({
-			columns: ['acao'],
+			columns: ['action'],
 			rowNodes: [params.node],
 			force: true,
 		});
@@ -175,9 +168,16 @@ export class AppComponent implements AfterViewInit {
 			this.newRow = false;
 		}
 		params.api.refreshCells({
-			columns: ['acao'],
+			columns: ['action'],
 			rowNodes: [params.node],
 			force: true,
 		});
+	}
+
+	pinRow() {
+		let rows = [];
+		rows.push({});
+
+		this.agGrid.api.setPinnedTopRowData(rows);
 	}
 }

@@ -6,17 +6,17 @@ import {
 } from 'ag-grid-community';
 
 @Component({
-	selector: 'acao2-component',
+	selector: 'action-component',
 	template: `
 		<div>
-			<button data-acao="guardar">Guardar</button>
-			<button onclick="this.disabled=true" data-acao="cancelar" style="margin-left: 10px">
-				Cancelar
+			<button data-action="edit">Editar</button>
+			<button onclick="this.disabled=true" data-action="delete" style="margin-left: 10px">
+				Eliminar
 			</button>
 		</div>
 	`,
 })
-export class AcaoRenderer2 implements ICellRendererAngularComp {
+export class ActionRenderer implements ICellRendererAngularComp {
 	params: ICellRendererParams;
 
 	refresh(params: ICellRendererParams): boolean {
