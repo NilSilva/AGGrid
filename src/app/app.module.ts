@@ -1,24 +1,19 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AgGridModule } from 'ag-grid-angular';
-
 import { ActionRenderer } from './action-renderer.component';
-import { CommonModule } from '@angular/common';
+import { AgGridModule } from 'ag-grid-angular';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
-	declarations: [
-		AppComponent
-	],
-	imports: [
-		BrowserModule,
-		AppRoutingModule,
-		CommonModule,
-		AgGridModule.withComponents([ActionRenderer])
-	],
-	providers: [],
-	bootstrap: [AppComponent]
+  declarations: [AppComponent, ActionRenderer],
+  imports: [
+    BrowserModule,
+    AgGridModule.withComponents([]),
+    BrowserAnimationsModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

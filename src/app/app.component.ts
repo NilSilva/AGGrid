@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import distritosConcelhosFreguesias from './distritosConcelhosFreguesias.json';
 import { ActionRenderer } from './action-renderer.component';
-import { ActionRenderer2 } from './action-renderer2.component';
 import { AgGridAngular } from 'ag-grid-angular';
 import { NewRowRenderer } from './new-row-renderer.component';
 
@@ -29,7 +28,6 @@ export class AppComponent implements AfterViewInit {
 
 	public frameworkComponents = {
 		actionRenderer: ActionRenderer,
-		actionRenderer2: ActionRenderer2,
 		newRowRenderer: NewRowRenderer,
 	};
 
@@ -67,28 +65,7 @@ export class AppComponent implements AfterViewInit {
 			headerName: 'Ação',
 			width: 100,
 			colId: 'action',
-			cellRendererSelector: function (params) {
-				let beforeClickEdit = {
-					component: 'actionRenderer',
-				};
-
-				let afterClickEdit = {
-					component: 'actionRenderer2',
-				};
-
-				let editingCells = params.api.getEditingCells();
-
-				//Checks if rowIndex matches one of the editing cells
-				let isRowEditing = editingCells.some((cell) => {
-					return cell.rowIndex === params.node.rowIndex;
-				});
-
-				if (!isRowEditing) {
-					return beforeClickEdit;
-				} else {
-					return afterClickEdit;
-				}
-			},
+			cellRenderer: 'actionRenderer'
 		},
 	];
 
