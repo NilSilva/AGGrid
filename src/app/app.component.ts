@@ -40,13 +40,19 @@ export class AppComponent implements AfterViewInit {
 			editable: true,
 			width: 400,
 			colSpan: function (params) {
-				if (params.node.isRowPinned()) {
+				if (params.node.isRowPinned() && params.node.rowIndex === 0) {
 					return 4;
 				} else {
 					return 1;
 				}
 			},
-			pinnedRowCellRenderer: 'newRowRenderer',
+			cellRendererSelector: function (params) {
+				if (params.node.isRowPinned() && params.node.rowIndex === 0) {
+					return { component: 'newRowRenderer' };
+				} else {
+					return null;
+				}
+			},
 		},
 		{
 			headerName: 'Tipo',
@@ -65,12 +71,12 @@ export class AppComponent implements AfterViewInit {
 			headerName: 'Ação',
 			width: 100,
 			colId: 'action',
-			cellRenderer: 'actionRenderer'
+			cellRenderer: 'actionRenderer',
 		},
 	];
 
 	ngAfterViewInit() {
-		this.pinRow();
+		this.pinCreateRowButton();
 	}
 
 	onCellClicked(params) {
@@ -98,7 +104,22 @@ export class AppComponent implements AfterViewInit {
 				if (this.newRow) {
 					this.newRow = false;
 				}
+
 				params.api.stopEditing(false);
+
+				let transaction = params.api.applyTransaction({
+					add: [params.node.data],
+					addIndex: 0,
+				});
+
+				params.api.paginationGoToPage(
+					Math.trunc(transaction.add[0].rowIndex / 10)
+				);
+				params.api.flashCells({
+					rowNodes: transaction.add,
+				});
+				
+				this.pinCreateRowButton();
 
 				console.log('Saving data:');
 				console.log(params.data);
@@ -106,9 +127,7 @@ export class AppComponent implements AfterViewInit {
 				if (this.newRow) {
 					console.log('Deleting new row.');
 
-					params.api.applyTransaction({
-						remove: [params.node.data],
-					});
+					this.pinCreateRowButton();
 
 					this.newRow = false;
 				} else {
@@ -121,15 +140,11 @@ export class AppComponent implements AfterViewInit {
 		) {
 			this.newRow = true;
 
-			params.api.paginationGoToPage(0)
-
-			params.api.applyTransaction({
-				add: [{}],
-				addIndex: 0,
-			});
+			this.pinNewRow();
 
 			params.api.startEditingCell({
-				rowIndex: 0,
+				rowIndex: 1,
+				rowPinned: 'top',
 				colKey: params.columnApi.getDisplayedCenterColumns()[0].colId,
 			});
 		}
@@ -152,10 +167,19 @@ export class AppComponent implements AfterViewInit {
 			rowNodes: [params.node],
 			force: true,
 		});
+		this.pinCreateRowButton();
 	}
 
-	pinRow() {
+	pinCreateRowButton() {
 		let rows = [];
+		rows.push({});
+
+		this.agGrid.api.setPinnedTopRowData(rows);
+	}
+
+	pinNewRow() {
+		let rows = [];
+		rows.push({});
 		rows.push({});
 
 		this.agGrid.api.setPinnedTopRowData(rows);

@@ -1,5 +1,5 @@
 <ag-grid-angular
-	style="width: 720px; height: 500px"
+	style="width: 100%; max-width: 702px"
 	class="ag-theme-alpine"
 	#agGrid
 	[pagination]="true"
@@ -14,5 +14,6 @@
     (rowEditingStarted)="onRowEditingStarted($event)"
 	accentedSort=true
 	animateRows=true
-	stopEditingWhenGridLosesFocus="true" >
+	stopEditingWhenGridLosesFocus="true"
+	domLayout="autoHeight" >
 </ag-grid-angular>

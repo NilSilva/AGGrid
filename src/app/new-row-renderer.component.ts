@@ -12,7 +12,8 @@ import {
 			data-newRow="true"
 			style="cursor: pointer;text-align: center;color:#bec8d4"
 		>
-			<i data-newRow="true" style="vertical-align:middle;" class="material-icons"> playlist_add </i><span data-newRow="true" style="vertical-align:middle;">Create new row</span>
+			<span data-newRow="true" style="vertical-align:middle;" class="material-icons"> playlist_add </span>
+			<span data-newRow="true" style="vertical-align:middle;">Create new row</span>
 
 		</div>
 	`,
