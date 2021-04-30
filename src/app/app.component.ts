@@ -31,6 +31,11 @@ export class AppComponent implements AfterViewInit {
 		newRowRenderer: NewRowRenderer,
 	};
 
+	defaultColDef = {
+        filter: true,
+		floatingFilter: true,
+	}
+
 	columnDefs = [
 		{
 			headerName: 'Nome',
@@ -72,6 +77,8 @@ export class AppComponent implements AfterViewInit {
 			width: 100,
 			colId: 'action',
 			cellRenderer: 'actionRenderer',
+			floatingFilter: false,
+			filter: false,
 		},
 	];
 
@@ -118,7 +125,7 @@ export class AppComponent implements AfterViewInit {
 				params.api.flashCells({
 					rowNodes: transaction.add,
 				});
-				
+
 				this.pinCreateRowButton();
 
 				console.log('Saving data:');

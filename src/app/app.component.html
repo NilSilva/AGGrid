@@ -5,15 +5,17 @@
 	[pagination]="true"
 	[paginationPageSize]="paginationPageSize"
 	[rowData]="localidades"
+	[defaultColDef]="defaultColDef"
 	[columnDefs]="columnDefs"
 	[editType]="editType"
 	[suppressClickEdit]="true"
 	[frameworkComponents]="frameworkComponents"
 	(cellClicked)="onCellClicked($event)"
 	(rowEditingStopped)="onRowEditingStopped($event)"
-    (rowEditingStarted)="onRowEditingStarted($event)"
-	accentedSort=true
-	animateRows=true
+	(rowEditingStarted)="onRowEditingStarted($event)"
+	accentedSort="true"
+	animateRows="true"
 	stopEditingWhenGridLosesFocus="true"
-	domLayout="autoHeight" >
+	domLayout="autoHeight"
+>
 </ag-grid-angular>
