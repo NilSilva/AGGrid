@@ -32,9 +32,9 @@ export class AppComponent implements AfterViewInit {
 	};
 
 	defaultColDef = {
-        filter: true,
+		filter: true,
 		floatingFilter: true,
-	}
+	};
 
 	columnDefs = [
 		{
@@ -108,26 +108,34 @@ export class AppComponent implements AfterViewInit {
 					remove: [params.node.data],
 				});
 			} else if (action === 'save') {
-				if (this.newRow) {
-					this.newRow = false;
-				}
-
 				params.api.stopEditing(false);
 
-				let transaction = params.api.applyTransaction({
-					add: [params.node.data],
-					addIndex: 0,
-				});
-
-				params.api.paginationGoToPage(
-					Math.trunc(transaction.add[0].rowIndex / 10)
-				);
-				params.api.flashCells({
-					rowNodes: transaction.add,
-				});
+				if (this.newRow) {
+					this.newRow = false;
+					
+					let transaction = params.api.applyTransaction({
+						add: [params.node.data],
+						addIndex: 0,
+					});
+					params.api.paginationGoToPage(
+						Math.trunc(transaction.add[0].rowIndex / 10)
+					);
+					params.api.flashCells({
+						rowNodes: transaction.add,
+					});
+				} else {
+					let transaction = params.api.applyTransaction({
+						update: [params.node.data],
+					});
+					params.api.paginationGoToPage(
+						Math.trunc(transaction.update[0].rowIndex / 10)
+					);
+					params.api.flashCells({
+						rowNodes: transaction.update,
+					});
+				}
 
 				this.pinCreateRowButton();
-
 				console.log('Saving data:');
 				console.log(params.data);
 			} else if (action === 'cancel') {
