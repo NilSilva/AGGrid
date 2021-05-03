@@ -1,15 +1,21 @@
 <ag-grid-angular
-	style="width: 1300px; height: 500px"
+	style="width: 100%; max-width: 702px"
 	class="ag-theme-alpine"
+	#agGrid
 	[pagination]="true"
 	[paginationPageSize]="paginationPageSize"
 	[rowData]="localidades"
+	[defaultColDef]="defaultColDef"
 	[columnDefs]="columnDefs"
 	[editType]="editType"
 	[suppressClickEdit]="true"
 	[frameworkComponents]="frameworkComponents"
 	(cellClicked)="onCellClicked($event)"
 	(rowEditingStopped)="onRowEditingStopped($event)"
-    (rowEditingStarted)="onRowEditingStarted($event)"
+	(rowEditingStarted)="onRowEditingStarted($event)"
+	accentedSort="true"
+	animateRows="true"
+	stopEditingWhenGridLosesFocus="true"
+	domLayout="autoHeight"
 >
 </ag-grid-angular>
