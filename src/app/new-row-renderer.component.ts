@@ -20,7 +20,7 @@ import {
 })
 export class NewRowRenderer implements ICellRendererAngularComp {
 	refresh(params: ICellRendererParams): boolean {
-		throw new Error('Method not implemented.');
+		return false;
 	}
 	agInit(params: ICellRendererParams): void {}
 	afterGuiAttached?(params?: IAfterGuiAttachedParams): void {

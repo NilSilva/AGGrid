@@ -3,6 +3,7 @@ import distritosConcelhosFreguesias from './distritosConcelhosFreguesias.json';
 import { ActionRenderer } from './action-renderer.component';
 import { AgGridAngular } from 'ag-grid-angular';
 import { NewRowRenderer } from './new-row-renderer.component';
+import { HighlightRendererComponent } from './highlightRenderer.component';
 
 @Component({
 	selector: 'app-root',
@@ -29,11 +30,13 @@ export class AppComponent implements AfterViewInit {
 	public frameworkComponents = {
 		actionRenderer: ActionRenderer,
 		newRowRenderer: NewRowRenderer,
+		highlightRenderer: HighlightRendererComponent,
 	};
 
 	defaultColDef = {
 		filter: true,
 		floatingFilter: true,
+		// suppressMenu: true
 	};
 
 	columnDefs = [
@@ -55,7 +58,7 @@ export class AppComponent implements AfterViewInit {
 				if (params.node.isRowPinned() && params.node.rowIndex === 0) {
 					return { component: 'newRowRenderer' };
 				} else {
-					return null;
+					return { component: 'highlightRenderer' };
 				}
 			},
 		},
@@ -112,7 +115,7 @@ export class AppComponent implements AfterViewInit {
 
 				if (this.newRow) {
 					this.newRow = false;
-					
+
 					let transaction = params.api.applyTransaction({
 						add: [params.node.data],
 						addIndex: 0,
@@ -123,6 +126,11 @@ export class AppComponent implements AfterViewInit {
 					params.api.flashCells({
 						rowNodes: transaction.add,
 					});
+					var param = {
+						force: true,
+						suppressFlash: true,
+					};
+					this.agGrid.api.refreshCells(param);
 				} else {
 					let transaction = params.api.applyTransaction({
 						update: [params.node.data],
@@ -163,6 +171,7 @@ export class AppComponent implements AfterViewInit {
 				colKey: params.columnApi.getDisplayedCenterColumns()[0].colId,
 			});
 		}
+		this.manageOverlays();
 	}
 
 	onRowEditingStarted(params) {
@@ -177,6 +186,7 @@ export class AppComponent implements AfterViewInit {
 		if (this.newRow) {
 			this.newRow = false;
 		}
+		this.agGrid.api.undoCellEditing();
 		params.api.refreshCells({
 			columns: ['action'],
 			rowNodes: [params.node],
@@ -198,5 +208,22 @@ export class AppComponent implements AfterViewInit {
 		rows.push({});
 
 		this.agGrid.api.setPinnedTopRowData(rows);
+	}
+
+	onFilterChanged(event) {
+		this.manageOverlays();
+		var params = {
+			force: true,
+			suppressFlash: true,
+		};
+		this.agGrid.api.refreshCells(params);
+	}
+
+	manageOverlays() {
+		if (this.agGrid.api.getDisplayedRowCount() === 0) {
+			this.agGrid.api.showNoRowsOverlay();
+		} else {
+			this.agGrid.api.hideOverlay();
+		}
 	}
 }

@@ -13,9 +13,12 @@
 	(cellClicked)="onCellClicked($event)"
 	(rowEditingStopped)="onRowEditingStopped($event)"
 	(rowEditingStarted)="onRowEditingStarted($event)"
+	(filterChanged)="onFilterChanged($event)"
 	accentedSort="true"
 	animateRows="true"
 	stopEditingWhenGridLosesFocus="true"
 	domLayout="autoHeight"
+	[undoRedoCellEditing]="true"
+	[undoRedoCellEditingLimit]="10"
 >
 </ag-grid-angular>
